@@ -13,7 +13,7 @@ export default function Home() {
 
   const searchImages = async () => {
     try {
-      const res = await fetch(/api/pexels?query=${search})
+      const res = await fetch(`/api/pexels?query=${search}`)
       const data = await res.json()
       setImages(data.photos || [])
     } catch (error) {
