@@ -30,7 +30,6 @@ export default function Home() {
 
   const handleSubmit = async (e:any)=>{
     e.preventDefault()
-
     const formData = new FormData(e.target)
 
     const payload = {
@@ -59,157 +58,189 @@ export default function Home() {
 
   if(submitted){
     return(
-      <div style={{
-        height:"100vh",
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center",
-        background:"#ffffff",
-        fontSize:"22px"
-      }}>
-        ✅ Form submitted. Your response has been recorded.
+      <div style={successContainer}>
+        ✅ Form submitted successfully.
       </div>
     )
   }
 
   return(
-    <div style={{
-      background:"#ffffff",
-      padding:"40px",
-      fontFamily:"Arial",
-      maxWidth:"800px",
-      margin:"0 auto"
-    }}>
+    <div style={pageWrapper}>
+      <div style={formCard}>
+        
+        <h1 style={headingStyle}>LinkedIn Post Planner</h1>
+        <p style={subHeading}>
+          Fill the details below to plan your next high-performing LinkedIn post
+        </p>
 
-      <h1 style={{
-        fontSize:"36px",
-        fontWeight:"bold",
-        color:"#eab308"
-      }}>
-        LinkedIn Post Planner
-      </h1>
+        <form onSubmit={handleSubmit}>
 
-      <p style={{
-        marginBottom:"30px",
-        color:"#6b7280"
-      }}>
-        Fill the details below for your post
-      </p>
+          <Input label="Full Name" name="fullName"/>
+          <Input label="Email Address" name="email"/>
+          <Input label="LinkedIn Profile URL" name="linkedinUrl"/>
+          <Input label="Post Title" name="title"/>
+          <Input type="date" label="Post Date" name="postDate"/>
+          <Input type="time" label="Post Time" name="postTime"/>
+          <Input type="number" label="Word Count" name="wordCount"/>
 
-      <form onSubmit={handleSubmit}>
+          <Select label="Tone" name="tone">
+            <option>Professional</option>
+            <option>Inspirational</option>
+            <option>Casual</option>
+          </Select>
 
-        <Input label="Full Name" name="fullName"/>
-        <Input label="Email" name="email"/>
-        <Input label="LinkedIn URL" name="linkedinUrl"/>
-        <Input label="Post Title" name="title"/>
-        <Input type="date" label="Post Date" name="postDate"/>
-        <Input type="time" label="Post Time" name="postTime"/>
-        <Input type="number" label="Word Count" name="wordCount"/>
+          <Select label="Profession" name="profession">
+            <option>Teacher</option>
+            <option>Student</option>
+            <option>Founder</option>
+            <option>Marketer</option>
+          </Select>
 
-        <Select label="Tone" name="tone">
-          <option>Professional</option>
-          <option>Inspirational</option>
-          <option>Casual</option>
-        </Select>
+          <TextArea label="Previous LinkedIn Post" name="previousPost"/>
+          <TextArea label="Custom Instructions" name="customInstructions"/>
 
-        <Select label="Profession" name="profession">
-          <option>Teacher</option>
-          <option>Student</option>
-          <option>Founder</option>
-          <option>Marketer</option>
-        </Select>
-
-        <TextArea label="Previous LinkedIn Post" name="previousPost"/>
-        <TextArea label="Custom Instructions" name="customInstructions"/>
-
-        {/* SEARCH IMAGES */}
-        <div style={{marginBottom:"20px"}}>
-          <input 
-            placeholder="Search images..."
-            value={search}
-            onChange={(e)=>setSearch(e.target.value)}
-            style={inputStyle}
-          />
-          <button 
-            type="button" 
-            onClick={searchImages}
-            style={{
-              marginTop:"10px",
-              padding:"8px 15px",
-              background:"#7c3aed",
-              color:"#ffffff",
-              border:"none",
-              borderRadius:"6px",
-              cursor:"pointer"
-            }}>
-            Search Images
-          </button>
-        </div>
-
-        {/* IMAGE GRID */}
-        <div style={{
-          display:"grid",
-          gridTemplateColumns:"repeat(3,1fr)",
-          gap:"10px",
-          marginBottom:"30px"
-        }}>
-          {images.map((img:any)=>(
-            <img
-              key={img.id}
-              src={img.src.medium}
-              onClick={()=>toggleImage(img.src.medium)}
-              style={{
-                width:"100%",
-                height:"150px",
-                objectFit:"cover",
-                cursor:"pointer",
-                border:selected.includes(img.src.medium)
-                  ?"3px solid #2563eb"
-                  :"2px solid #d1d5db",
-                borderRadius:"6px"
-              }}
+          {/* IMAGE SEARCH */}
+          <div style={{marginBottom:"20px"}}>
+            <input 
+              placeholder="Search images..."
+              value={search}
+              onChange={(e)=>setSearch(e.target.value)}
+              style={inputStyle}
             />
-          ))}
-        </div>
+            <button type="button" onClick={searchImages} style={secondaryButton}>
+              Search Images
+            </button>
+          </div>
 
-        <button
-          type="submit"
-          style={{
-            padding:"12px 25px",
-            background:"#7c3aed",
-            color:"#ffffff",
-            border:"none",
-            borderRadius:"6px",
-            fontWeight:"600",
-            cursor:"pointer"
-          }}>
-          Submit
-        </button>
+          {/* IMAGE GRID */}
+          <div style={imageGrid}>
+            {images.map((img:any)=>(
+              <img
+                key={img.id}
+                src={img.src.medium}
+                onClick={()=>toggleImage(img.src.medium)}
+                style={{
+                  ...imageStyle,
+                  border:selected.includes(img.src.medium)
+                    ?"3px solid #2563eb"
+                    :"2px solid #e5e7eb"
+                }}
+              />
+            ))}
+          </div>
 
-      </form>
+          <button type="submit" style={primaryButton}>
+            Submit Post Plan
+          </button>
+
+        </form>
+      </div>
     </div>
   )
 }
 
-/* Input Style */
+/* ================== STYLES ================== */
+
+const pageWrapper={
+  background:"#ffffff",
+  minHeight:"100vh",
+  display:"flex",
+  justifyContent:"center",
+  alignItems:"center",
+  padding:"40px",
+  fontFamily:"Inter, Arial, sans-serif"
+}
+
+const formCard={
+  width:"100%",
+  maxWidth:"700px",
+  background:"#ffffff",
+  padding:"40px",
+  borderRadius:"14px",
+  boxShadow:"0 10px 30px rgba(0,0,0,0.08)"
+}
+
+const headingStyle={
+  fontSize:"34px",
+  fontWeight:"700",
+  color:"#facc15", // yellow like website
+  marginBottom:"8px"
+}
+
+const subHeading={
+  color:"#6b7280",
+  marginBottom:"30px"
+}
 
 const inputStyle={
   width:"100%",
-  padding:"10px",
-  marginTop:"5px",
+  padding:"12px",
+  marginTop:"6px",
+  marginBottom:"18px",
   border:"1px solid #d1d5db",
-  borderRadius:"6px",
+  borderRadius:"8px",
+  fontSize:"15px",
+  color:"#000000",
   outline:"none"
 }
 
-/* Components */
+const primaryButton={
+  width:"100%",
+  padding:"14px",
+  background:"#5b5bd6",
+  color:"#ffffff",
+  border:"none",
+  borderRadius:"8px",
+  fontWeight:"600",
+  fontSize:"16px",
+  cursor:"pointer",
+  marginTop:"20px"
+}
+
+const secondaryButton={
+  marginTop:"10px",
+  padding:"10px 18px",
+  background:"#5b5bd6",
+  color:"#fff",
+  border:"none",
+  borderRadius:"8px",
+  cursor:"pointer"
+}
+
+const imageGrid={
+  display:"grid",
+  gridTemplateColumns:"repeat(3,1fr)",
+  gap:"12px",
+  marginTop:"20px",
+  marginBottom:"30px"
+}
+
+const imageStyle={
+  width:"100%",
+  height:"140px",
+  objectFit:"cover",
+  borderRadius:"8px",
+  cursor:"pointer",
+  transition:"all 0.2s ease"
+}
+
+const successContainer={
+  height:"100vh",
+  display:"flex",
+  justifyContent:"center",
+  alignItems:"center",
+  fontSize:"22px",
+  background:"#ffffff"
+}
+
+/* COMPONENTS */
 
 function Input({label,name,type="text"}:any){
   return(
-    <div style={{marginBottom:"20px"}}>
-      <label style={{color:"#7c3aed",fontWeight:"600"}}>
+    <div>
+      <label style={{fontWeight:"600",color:"#4f46e5"}}>
         {label}
-      </label><br/>
+      </label>
       <input name={name} type={type} style={inputStyle}/>
     </div>
   )
@@ -217,10 +248,10 @@ function Input({label,name,type="text"}:any){
 
 function Select({label,name,children}:any){
   return(
-    <div style={{marginBottom:"20px"}}>
-      <label style={{color:"#7c3aed",fontWeight:"600"}}>
+    <div>
+      <label style={{fontWeight:"600",color:"#4f46e5"}}>
         {label}
-      </label><br/>
+      </label>
       <select name={name} style={inputStyle}>
         {children}
       </select>
@@ -230,10 +261,10 @@ function Select({label,name,children}:any){
 
 function TextArea({label,name}:any){
   return(
-    <div style={{marginBottom:"20px"}}>
-      <label style={{color:"#7c3aed",fontWeight:"600"}}>
+    <div>
+      <label style={{fontWeight:"600",color:"#4f46e5"}}>
         {label}
-      </label><br/>
+      </label>
       <textarea name={name} rows={4} style={inputStyle}/>
     </div>
   )
