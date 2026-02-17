@@ -11,14 +11,15 @@ export default function Home() {
   const webhookUrl = "http://localhost:5678/webhook/da707a5c-68f0-4d31-aac2-ba8e7c5d2dc6"
 
   const searchImages = async () => {
-  try {
-    const res = await fetch(`/api/pexels?query=${search}`)
-    const data = await res.json()
-    setImages(data.photos || [])
-  } catch (error) {
-    console.error("Image fetch failed:", error)
+    try {
+      const res = await fetch(/api/pexels?query=${search})
+      const data = await res.json()
+      setImages(data.photos || [])
+    } catch (error) {
+      console.error("Image fetch failed:", error)
+    }
   }
-}
+
   const toggleImage = (url:string)=>{
     if(selected.includes(url)){
       setSelected(selected.filter(i=>i!==url))
@@ -72,11 +73,26 @@ export default function Home() {
   }
 
   return(
-    <div style={{background:"#fff",padding:"40px",fontFamily:"Arial"}}>
-      <h1 style={{fontSize:"36px",fontWeight:"bold",color:"#111827"}}>
+    <div style={{
+      background:"#ffffff",
+      padding:"40px",
+      fontFamily:"Arial",
+      maxWidth:"900px",
+      margin:"0 auto"
+    }}>
+
+      <h1 style={{
+        fontSize:"36px",
+        fontWeight:"bold",
+        color:"#eab308"   // Yellow
+      }}>
         LinkedIn Post Planner
       </h1>
-      <p style={{marginBottom:"30px",color:"#6b7280"}}>
+
+      <p style={{
+        marginBottom:"30px",
+        color:"#6b7280"
+      }}>
         Fill the details below for your post
       </p>
 
@@ -114,8 +130,18 @@ export default function Home() {
             onChange={(e)=>setSearch(e.target.value)}
             style={inputStyle}
           />
-          <button type="button" onClick={searchImages}
-            style={{marginTop:"10px",padding:"8px 15px"}}>
+          <button 
+            type="button" 
+            onClick={searchImages}
+            style={{
+              marginTop:"10px",
+              padding:"8px 15px",
+              background:"#4f46e5",
+              color:"#fff",
+              border:"none",
+              borderRadius:"6px",
+              cursor:"pointer"
+            }}>
             Search Images
           </button>
         </div>
@@ -138,20 +164,24 @@ export default function Home() {
                 objectFit:"cover",
                 cursor:"pointer",
                 border:selected.includes(img.src.medium)
-                  ?"3px solid blue"
-                  :"2px solid #ddd"
+                  ?"3px solid #4f46e5"
+                  :"2px solid #ddd",
+                borderRadius:"8px"
               }}
             />
           ))}
         </div>
 
-        <button type="submit"
+        <button 
+          type="submit"
           style={{
             padding:"12px 25px",
-            background:"#4f46e5",
+            background:"linear-gradient(90deg,#4f46e5,#6366f1)",
             color:"#fff",
             border:"none",
-            borderRadius:"6px"
+            borderRadius:"6px",
+            cursor:"pointer",
+            fontWeight:"600"
           }}>
           Submit
         </button>
@@ -174,7 +204,7 @@ const inputStyle={
 function Input({label,name,type="text"}:any){
   return(
     <div style={{marginBottom:"20px"}}>
-      <label>{label}</label><br/>
+      <label style={{color:"#4f46e5",fontWeight:"600"}}>{label}</label><br/>
       <input name={name} type={type} style={inputStyle}/>
     </div>
   )
@@ -183,7 +213,7 @@ function Input({label,name,type="text"}:any){
 function Select({label,name,children}:any){
   return(
     <div style={{marginBottom:"20px"}}>
-      <label>{label}</label><br/>
+      <label style={{color:"#4f46e5",fontWeight:"600"}}>{label}</label><br/>
       <select name={name} style={inputStyle}>
         {children}
       </select>
@@ -194,7 +224,7 @@ function Select({label,name,children}:any){
 function TextArea({label,name}:any){
   return(
     <div style={{marginBottom:"20px"}}>
-      <label>{label}</label><br/>
+      <label style={{color:"#4f46e5",fontWeight:"600"}}>{label}</label><br/>
       <textarea name={name} rows={4} style={inputStyle}/>
     </div>
   )
