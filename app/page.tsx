@@ -164,7 +164,7 @@ export default function Home() {
                 objectFit:"cover",
                 cursor:"pointer",
                 border:selected.includes(img.src.medium)
-                  ?"3px solid #4f46e5"
+                  ?"3px solid #2563eb"
                   :"2px solid #ddd",
                 borderRadius:"8px"
               }}
