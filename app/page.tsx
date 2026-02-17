@@ -64,7 +64,7 @@ export default function Home() {
         display:"flex",
         justifyContent:"center",
         alignItems:"center",
-        background:"#fff",
+        background:"#ffffff",
         fontSize:"22px"
       }}>
         ✅ Form submitted. Your response has been recorded.
@@ -77,14 +77,14 @@ export default function Home() {
       background:"#ffffff",
       padding:"40px",
       fontFamily:"Arial",
-      maxWidth:"900px",
+      maxWidth:"800px",
       margin:"0 auto"
     }}>
 
       <h1 style={{
         fontSize:"36px",
         fontWeight:"bold",
-        color:"#eab308"   // Yellow
+        color:"#eab308"
       }}>
         LinkedIn Post Planner
       </h1>
@@ -136,8 +136,8 @@ export default function Home() {
             style={{
               marginTop:"10px",
               padding:"8px 15px",
-              background:"#4f46e5",
-              color:"#fff",
+              background:"#7c3aed",
+              color:"#ffffff",
               border:"none",
               borderRadius:"6px",
               cursor:"pointer"
@@ -165,23 +165,23 @@ export default function Home() {
                 cursor:"pointer",
                 border:selected.includes(img.src.medium)
                   ?"3px solid #2563eb"
-                  :"2px solid #ddd",
-                borderRadius:"8px"
+                  :"2px solid #d1d5db",
+                borderRadius:"6px"
               }}
             />
           ))}
         </div>
 
-        <button 
+        <button
           type="submit"
           style={{
             padding:"12px 25px",
-            background:"linear-gradient(90deg,#4f46e5,#6366f1)",
-            color:"#fff",
+            background:"#7c3aed",
+            color:"#ffffff",
             border:"none",
             borderRadius:"6px",
-            cursor:"pointer",
-            fontWeight:"600"
+            fontWeight:"600",
+            cursor:"pointer"
           }}>
           Submit
         </button>
@@ -191,20 +191,25 @@ export default function Home() {
   )
 }
 
-/* Components */
+/* Input Style */
 
 const inputStyle={
   width:"100%",
   padding:"10px",
   marginTop:"5px",
-  border:"1px solid #ccc",
-  borderRadius:"6px"
+  border:"1px solid #d1d5db",
+  borderRadius:"6px",
+  outline:"none"
 }
+
+/* Components */
 
 function Input({label,name,type="text"}:any){
   return(
     <div style={{marginBottom:"20px"}}>
-      <label style={{color:"#4f46e5",fontWeight:"600"}}>{label}</label><br/>
+      <label style={{color:"#7c3aed",fontWeight:"600"}}>
+        {label}
+      </label><br/>
       <input name={name} type={type} style={inputStyle}/>
     </div>
   )
@@ -213,7 +218,9 @@ function Input({label,name,type="text"}:any){
 function Select({label,name,children}:any){
   return(
     <div style={{marginBottom:"20px"}}>
-      <label style={{color:"#4f46e5",fontWeight:"600"}}>{label}</label><br/>
+      <label style={{color:"#7c3aed",fontWeight:"600"}}>
+        {label}
+      </label><br/>
       <select name={name} style={inputStyle}>
         {children}
       </select>
@@ -224,7 +231,9 @@ function Select({label,name,children}:any){
 function TextArea({label,name}:any){
   return(
     <div style={{marginBottom:"20px"}}>
-      <label style={{color:"#4f46e5",fontWeight:"600"}}>{label}</label><br/>
+      <label style={{color:"#7c3aed",fontWeight:"600"}}>
+        {label}
+      </label><br/>
       <textarea name={name} rows={4} style={inputStyle}/>
     </div>
   )
