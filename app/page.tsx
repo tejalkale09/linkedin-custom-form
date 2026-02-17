@@ -2,36 +2,75 @@
 import { useState } from 'react'
 
 export default function Home() {
-  const [submitted, setSubmitted] = useState(false)
 
-  const imageOptions = [
-    "Motivational",
-    "Business",
-    "Education",
-    "Marketing",
-    "AI / Tech",
-    "Minimal",
-  ]
+  const [submitted,setSubmitted]=useState(false)
+  const [images,setImages]=useState<any[]>([])
+  const [selected,setSelected]=useState<string[]>([])
+  const [search,setSearch]=useState("business")
 
-  const [selectedImage, setSelectedImage] = useState("")
+  const webhookUrl = "http://localhost:5678/webhook/da707a5c-68f0-4d31-aac2-ba8e7c5d2dc6"
 
-  const handleSubmit = (e:any) => {
+  const searchImages = async () => {
+    const res = await fetch(/api/pexels?query=${search})
+    const data = await res.json()
+    setImages(data.photos)
+  }
+
+  const toggleImage = (url:string)=>{
+    if(selected.includes(url)){
+      setSelected(selected.filter(i=>i!==url))
+    }else{
+      setSelected([...selected,url])
+    }
+  }
+
+  const handleSubmit = async (e:any)=>{
     e.preventDefault()
+
+    const formData = new FormData(e.target)
+
+    const payload = {
+      fullName: formData.get("fullName"),
+      email: formData.get("email"),
+      linkedinUrl: formData.get("linkedinUrl"),
+      title: formData.get("title"),
+      tone: formData.get("tone"),
+      postDate: formData.get("postDate"),
+      postTime: formData.get("postTime"),
+      wordCount: formData.get("wordCount"),
+      profession: formData.get("profession"),
+      previousPost: formData.get("previousPost"),
+      customInstructions: formData.get("customInstructions"),
+      selectedImages: selected
+    }
+
+    await fetch(webhookUrl,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    })
+
     setSubmitted(true)
   }
 
-  if (submitted) {
-    return (
-      <div style={{background:"#000",height:"100vh",color:"#FFD700",display:"flex",justifyContent:"center",alignItems:"center",fontSize:"22px"}}>
+  if(submitted){
+    return(
+      <div style={{
+        height:"100vh",
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center",
+        background:"#fff",
+        fontSize:"22px"
+      }}>
         ✅ Form submitted. Your response has been recorded.
       </div>
     )
   }
 
-  return (
-    <div style={{background:"#000",minHeight:"100vh",color:"white",padding:"40px",fontFamily:"Arial"}}>
-
-      <h1 style={{color:"#FFD700",fontSize:"36px"}}>
+  return(
+    <div style={{background:"#fff",padding:"40px",fontFamily:"Arial"}}>
+      <h1 style={{fontSize:"36px",fontWeight:"bold"}}>
         LinkedIn Post Planner
       </h1>
       <p style={{marginBottom:"30px"}}>
@@ -40,96 +79,77 @@ export default function Home() {
 
       <form onSubmit={handleSubmit}>
 
-        {/* Full Name */}
-        <Input label="Full Name" type="text" />
+        <Input label="Full Name" name="fullName"/>
+        <Input label="Email" name="email"/>
+        <Input label="LinkedIn URL" name="linkedinUrl"/>
+        <Input label="Post Title" name="title"/>
+        <Input type="date" label="Post Date" name="postDate"/>
+        <Input type="time" label="Post Time" name="postTime"/>
+        <Input type="number" label="Word Count" name="wordCount"/>
 
-        {/* Email */}
-        <Input label="Email" type="email" />
-
-        {/* LinkedIn URL */}
-        <Input label="LinkedIn Profile URL" type="text" />
-
-        {/* Title */}
-        <Input label="Post Title" type="text" />
-
-        {/* Tone */}
-        <Select label="Tone">
+        <Select label="Tone" name="tone">
           <option>Professional</option>
-          <option>Casual</option>
           <option>Inspirational</option>
-          <option>Educational</option>
-          <option>Storytelling</option>
+          <option>Casual</option>
         </Select>
 
-        {/* Profession */}
-        <Select label="Profession">
+        <Select label="Profession" name="profession">
           <option>Teacher</option>
           <option>Student</option>
           <option>Founder</option>
           <option>Marketer</option>
-          <option>Developer</option>
         </Select>
 
-        {/* Post Date */}
-        <Input label="Post Date" type="date" />
+        <TextArea label="Previous LinkedIn Post" name="previousPost"/>
+        <TextArea label="Custom Instructions" name="customInstructions"/>
 
-        {/* Post Time */}
-        <Input label="Post Time" type="time" />
-
-        {/* Word Count */}
-        <Input label="Word Count" type="number" />
-
-        {/* Previous LinkedIn Post */}
-        <TextArea label="Share Your Previous LinkedIn Post" />
-
-        {/* Custom Instructions */}
-        <TextArea label="Custom Instructions" />
-
-        {/* Upload Image */}
+        {/* SEARCH IMAGES */}
         <div style={{marginBottom:"20px"}}>
-          <label>Upload Post Image</label><br/>
-          <input type="file" style={inputStyle}/>
+          <input 
+            placeholder="Search images..."
+            value={search}
+            onChange={(e)=>setSearch(e.target.value)}
+            style={inputStyle}
+          />
+          <button type="button" onClick={searchImages}
+            style={{marginTop:"10px",padding:"8px 15px"}}>
+            Search Images
+          </button>
         </div>
 
-        {/* Choose Image Grid */}
-        <div style={{marginBottom:"20px"}}>
-          <label>Choose Image Style</label>
-          <div style={{
-            display:"grid",
-            gridTemplateColumns:"repeat(3,1fr)",
-            gap:"10px",
-            marginTop:"10px"
-          }}>
-            {imageOptions.map((img)=>(
-              <div
-                key={img}
-                onClick={()=>setSelectedImage(img)}
-                style={{
-                  padding:"15px",
-                  border:selectedImage===img?"2px solid #FFD700":"1px solid gray",
-                  textAlign:"center",
-                  cursor:"pointer",
-                  borderRadius:"8px"
-                }}
-              >
-                {img}
-              </div>
-            ))}
-          </div>
+        {/* IMAGE GRID */}
+        <div style={{
+          display:"grid",
+          gridTemplateColumns:"repeat(3,1fr)",
+          gap:"10px",
+          marginBottom:"30px"
+        }}>
+          {images.map((img:any)=>(
+            <img
+              key={img.id}
+              src={img.src.medium}
+              onClick={()=>toggleImage(img.src.medium)}
+              style={{
+                width:"100%",
+                height:"150px",
+                objectFit:"cover",
+                cursor:"pointer",
+                border:selected.includes(img.src.medium)
+                  ?"3px solid blue"
+                  :"2px solid #ddd"
+              }}
+            />
+          ))}
         </div>
 
-        <button
-          type="submit"
+        <button type="submit"
           style={{
             padding:"12px 25px",
-            background:"linear-gradient(90deg,#6a11cb,#2575fc)",
+            background:"#4f46e5",
+            color:"#fff",
             border:"none",
-            borderRadius:"30px",
-            color:"white",
-            fontSize:"16px",
-            cursor:"pointer"
-          }}
-        >
+            borderRadius:"6px"
+          }}>
           Submit
         </button>
 
@@ -138,43 +158,41 @@ export default function Home() {
   )
 }
 
-/* ---------- Reusable Components ---------- */
+/* Components */
 
-const inputStyle = {
+const inputStyle={
   width:"100%",
   padding:"10px",
   marginTop:"5px",
-  background:"#111",
-  border:"1px solid gray",
-  color:"white",
+  border:"1px solid #ccc",
   borderRadius:"6px"
 }
 
-function Input({label,type}:{label:string,type:string}) {
-  return (
+function Input({label,name,type="text"}:any){
+  return(
     <div style={{marginBottom:"20px"}}>
       <label>{label}</label><br/>
-      <input type={type} style={inputStyle}/>
+      <input name={name} type={type} style={inputStyle}/>
     </div>
   )
 }
 
-function Select({label,children}:{label:string,children:any}) {
-  return (
+function Select({label,name,children}:any){
+  return(
     <div style={{marginBottom:"20px"}}>
       <label>{label}</label><br/>
-      <select style={inputStyle}>
+      <select name={name} style={inputStyle}>
         {children}
       </select>
     </div>
   )
 }
 
-function TextArea({label}:{label:string}) {
-  return (
+function TextArea({label,name}:any){
+  return(
     <div style={{marginBottom:"20px"}}>
       <label>{label}</label><br/>
-      <textarea rows={4} style={inputStyle}/>
+      <textarea name={name} rows={4} style={inputStyle}/>
     </div>
   )
 }
