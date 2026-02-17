@@ -73,10 +73,10 @@ export default function Home() {
 
   return(
     <div style={{background:"#fff",padding:"40px",fontFamily:"Arial"}}>
-      <h1 style={{fontSize:"36px",fontWeight:"bold"}}>
+      <h1 style={{fontSize:"36px",fontWeight:"bold",color:"#111827"}}>
         LinkedIn Post Planner
       </h1>
-      <p style={{marginBottom:"30px"}}>
+      <p style={{marginBottom:"30px",color:"#6b7280"}}>
         Fill the details below for your post
       </p>
 
