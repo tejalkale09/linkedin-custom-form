@@ -9,7 +9,7 @@ export default function Home() {
   const [search, setSearch] = useState('business')
 
   const webhookUrl =
-    'http://localhost:5678/webhook/da707a5c-68f0-4d31-aac2-ba8e7c5d2dc6'
+    "http://localhost:5678/webhook/da707a5c-68f0-4d31-aac2-ba8e7c5d2dc6"
 
   const searchImages = async () => {
     try {
