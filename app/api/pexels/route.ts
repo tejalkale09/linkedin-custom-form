@@ -10,7 +10,7 @@ export async function GET(req: Request) {
     `https://api.pexels.com/v1/search?query=${query}&per_page=9`,
     {
       headers: {
-        Authorization: process.env.PEXELS_API_KEY as string,
+        Authorization: process.env.PEXELS_API_KEY!,
       },
     }
   )
