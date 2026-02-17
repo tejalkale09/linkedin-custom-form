@@ -11,11 +11,14 @@ export default function Home() {
   const webhookUrl = "http://localhost:5678/webhook/da707a5c-68f0-4d31-aac2-ba8e7c5d2dc6"
 
   const searchImages = async () => {
-    const res = await fetch(/api/pexels?query=${search})
+  try {
+    const res = await fetch(`/api/pexels?query=${search}`)
     const data = await res.json()
-    setImages(data.photos)
+    setImages(data.photos || [])
+  } catch (error) {
+    console.error("Image fetch failed:", error)
   }
-
+}
   const toggleImage = (url:string)=>{
     if(selected.includes(url)){
       setSelected(selected.filter(i=>i!==url))
