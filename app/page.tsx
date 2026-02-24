@@ -30,33 +30,35 @@ export default function Home() {
   }
 
   const handleSubmit = async (e: any) => {
-    e.preventDefault()
-    const formData = new FormData(e.target)
+  e.preventDefault();
 
-    const payload = {
-      fullName: formData.get('fullName'),
-      email: formData.get('email'),
-      linkedinUrl: formData.get('linkedinUrl'),
-      title: formData.get('title'),
-      tone: formData.get('tone'),
-      postDate: formData.get('postDate'),
-      postTime: formData.get('postTime'),
-      wordCount: formData.get('wordCount'),
-      profession: formData.get('profession'),
-      previousPost: formData.get('previousPost'),
-      customInstructions: formData.get('customInstructions'),
-      selectedImages: selected,
-    }
+  const formData = new FormData(e.target);
 
-    await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
+  const payload = {
+    fullName: formData.get("fullName"),
+    email: formData.get("email"),
+    linkedinUrl: formData.get("linkedinUrl"),
+    title: formData.get("title"),
+    postDate: formData.get("postDate"),
+    postTime: formData.get("postTime"),
+    wordCount: formData.get("wordCount"),
+    tone: formData.get("tone"),
+    profession: formData.get("profession"),
+    previousPost: formData.get("previousPost"),
+    customInstructions: formData.get("customInstructions"),
+    selectedImages: selected,
+  };
 
-    setSubmitted(true)
-  }
+  await fetch("http://localhost:5678/webhook/linkedln-form", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
 
+  router.push("/success");
+};
   if (submitted) {
     return (
       <div style={successStyle}>
