@@ -43,7 +43,6 @@ export default function Home() {
     postTime: formData.get("postTime"),
     wordCount: formData.get("wordCount"),
     tone: formData.get("tone"),
-    profession: formData.get("profession"),
     previousPost: formData.get("previousPost"),
     customInstructions: formData.get("customInstructions"),
     selectedImages: selected,
@@ -87,13 +86,7 @@ export default function Home() {
           <option>Casual</option>
         </Select>
 
-        <Select label="Profession" name="profession">
-          <option>Founder</option>
-          <option>Marketer</option>
-          <option>Student</option>
-          <option>Teacher</option>
-        </Select>
-
+        
         <TextArea label="Previous LinkedIn Post" name="previousPost" />
         <TextArea label="Custom Instructions" name="customInstructions" />
 
