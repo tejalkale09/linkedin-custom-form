@@ -6,11 +6,14 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const [images, setImages] = useState<any[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [search, setSearch] = useState("business");
   const router = useRouter();
 
   const webhookUrl =
-    " https://leanne-piliferous-efren.ngrok-free.dev/webhook/linkedin-custom-form";
+    "https://leanne-piliferous-efren.ngrok-free.dev/webhook/linkedin-custom-form";
+
+  /* ================= IMAGE SEARCH ================= */
 
   const searchImages = async () => {
     const res = await fetch(`/api/pexels?query=${search}`);
@@ -26,40 +29,40 @@ export default function Home() {
     );
   };
 
+  /* ================= CLIENT IMAGE UPLOAD ================= */
+
+  const handleImageUpload = (e: any) => {
+    const files = Array.from(e.target.files || []);
+    setUploadedImages(files as File[]);
+  };
+
+  /* ================= SUBMIT ================= */
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
+    const form = new FormData(e.target);
 
-    const payload = {
-      client_id:crypto.randomUUID(),
-      fullName: formData.get("fullName"),
-      email: formData.get("email"),
-      linkedinUrl: formData.get("linkedinUrl"),
-      title: formData.get("title"),
-      tone: formData.get("tone"),
-      postDate: formData.get("postDate"),
-      postTime: formData.get("postTime"),
-      wordCount: formData.get("wordCount"),
-      previousPost: formData.get("previousPost"),
-      customInstructions: formData.get("customInstructions"),
-      selectedImages: selected,
-    };
+    form.append("client_id", crypto.randomUUID());
+    form.append("selectedImages", JSON.stringify(selected));
+
+    uploadedImages.forEach((file, index) => {
+      form.append(`uploaded_${index}`, file);
+    });
 
     try {
       await fetch(webhookUrl, {
         method: "POST",
+        body: form,
         headers: {
-          "Content-Type": "application/json",
-          "ngrok-skip-browser-warning":"true"
+          "ngrok-skip-browser-warning": "true",
         },
-        body: JSON.stringify(payload),
       });
 
-      router.push("/success"as any);
+      router.push("/success" as any);
     } catch (error) {
-      console.error("Webhook error:", error);
-      alert("Error sending data to automation");
+      console.error(error);
+      alert("Webhook error");
     }
   };
 
@@ -89,8 +92,9 @@ export default function Home() {
           <TextArea label="Previous LinkedIn Post" name="previousPost" />
           <TextArea label="Custom Instructions" name="customInstructions" />
 
+          {/* ===== SEARCH IMAGES ===== */}
           <div style={{ marginBottom: "20px" }}>
-            <label style={labelStyle}>Search Images</label>
+            <label style={labelStyle}>Search AI Images</label>
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -102,6 +106,7 @@ export default function Home() {
             </button>
           </div>
 
+          {/* ===== IMAGE GRID ===== */}
           <div style={gridStyle}>
             {images.map((img: any) => (
               <img
@@ -118,6 +123,32 @@ export default function Home() {
             ))}
           </div>
 
+          {/* ===== CLIENT IMAGE UPLOAD ===== */}
+          <div style={{ marginBottom: "20px" }}>
+            <label style={labelStyle}>Upload Your Images</label>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleImageUpload}
+              style={inputStyle}
+            />
+          </div>
+
+          {/* ===== PREVIEW UPLOADED ===== */}
+          <div style={gridStyle}>
+            {uploadedImages.map((file, i) => (
+              <img
+                key={i}
+                src={URL.createObjectURL(file)}
+                style={{
+                  ...imageStyle,
+                  border: "3px solid #F4C430",
+                }}
+              />
+            ))}
+          </div>
+
           <button type="submit" style={buttonPrimary}>
             Submit
           </button>
@@ -127,7 +158,7 @@ export default function Home() {
   );
 }
 
-/* COMPONENTS */
+/* ================= COMPONENTS ================= */
 
 function Input({ label, name, type = "text" }: any) {
   return (
@@ -158,7 +189,7 @@ function TextArea({ label, name }: any) {
   );
 }
 
-/* STYLES */
+/* ================= STYLES ================= */
 
 const pageStyle = {
   backgroundColor: "#F5F6FA",
@@ -193,7 +224,7 @@ const labelStyle = {
   display: "block",
   marginBottom: "6px",
   fontWeight: 600,
-  color: "#1E1E2F",
+  color: "#000",
 };
 
 const inputStyle = {
@@ -203,6 +234,7 @@ const inputStyle = {
   border: "1px solid #E5E7EB",
   fontSize: "14px",
   marginBottom: "18px",
+  color: "#000",
 };
 
 const buttonPrimary = {
