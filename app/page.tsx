@@ -32,6 +32,7 @@ export default function Home() {
     const formData = new FormData(e.target);
 
     const payload = {
+      client_id:crypto.randomUUID(),
       fullName: formData.get("fullName"),
       email: formData.get("email"),
       linkedinUrl: formData.get("linkedinUrl"),
