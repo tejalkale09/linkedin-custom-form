@@ -11,7 +11,7 @@ export default function Home() {
   const router = useRouter();
 
   const webhookUrl =
-    "https://ds23.app.n8n.cloud/webhook/linkedin-custom-form";
+    "https://ds23.app.n8n.cloud/webhook-test/linkedin-custom-form";
 
   /* ================= IMAGE SEARCH ================= */
 
