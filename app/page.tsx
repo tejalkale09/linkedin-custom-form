@@ -11,7 +11,7 @@ export default function Home() {
   const router = useRouter();
 
   const webhookUrl =
-    "https://leanne-piliferous-efren.ngrok-free.dev/webhook/linkedin-custom-form";
+    "https://ds23.app.n8n.cloud/webhook/linkedin-custom-form";
 
   /* ================= IMAGE SEARCH ================= */
 
